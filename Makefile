@@ -1,6 +1,6 @@
 SRC = main.c
 OBJ = ${SRC:.c=.o}
-OUT = wm
+OUT = xwm
 LDFLAGS = -lX11
 
 
