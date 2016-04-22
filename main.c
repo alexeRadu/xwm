@@ -55,6 +55,8 @@ void display_info(Display *display)
 int main(int argc, char **argv)
 {
 	Display *display;
+	Window rootwnd, wnd;
+	int loop = 1;
 
 	display = XOpenDisplay(NULL);
 	if (display == NULL) {
@@ -64,6 +66,29 @@ int main(int argc, char **argv)
 
 	display_info(display);
 
+	rootwnd = XDefaultRootWindow(display);
+	XSelectInput(display, rootwnd, ButtonPressMask);
+	XSync(display, 0);
+
+	wnd = XCreateWindow(display, rootwnd,
+						10, 10, 300, 300,
+						1, CopyFromParent, InputOutput, CopyFromParent,
+						SubstructureNotifyMask, 0);
+	XMapWindow(display, wnd);
+
+	while (loop) {
+		XEvent e;
+
+		XNextEvent(display, &e);
+
+		switch (e.type) {
+			case ButtonPress:
+				loop = 0;
+				break;
+			default:
+				printf("XEvent not yet handledi\n");
+		}
+	}
 
 	return 0;
 }
